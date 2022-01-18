@@ -1,13 +1,16 @@
 import type { AppProps } from "next/app";
+import { Store } from "~/context";
 import { ThemeProvider } from "~/theme";
 import "~/lib/_github-markdown.css";
 
-function MyApp({ Component, pageProps }: AppProps) {
+const HelperApp = ({ Component, pageProps }: AppProps) => {
   return (
     <ThemeProvider>
-      <Component {...pageProps} />
+      <Store>
+        <Component {...pageProps} />
+      </Store>
     </ThemeProvider>
   );
-}
+};
 
-export default MyApp;
+export default HelperApp;

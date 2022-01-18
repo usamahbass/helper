@@ -6,6 +6,7 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
+import NextLink from "next/link";
 
 const Footer = () => {
   return (
@@ -20,9 +21,24 @@ const Footer = () => {
       >
         <Text fontSize="lg">&copy; 2021 Helper</Text>
         <Stack direction="row" mt={3} spacing={6}>
-          <Link href="#">Github</Link>
-          <Link href="#">Issues</Link>
-          <Link href="#">Contribute</Link>
+          <Link target="_blank" href="https://github.com/usamahbass/helper">
+            Github
+          </Link>
+          <Link
+            target="_blank"
+            href="https://github.com/usamahbass/helper/issues"
+          >
+            Issues
+          </Link>
+          <NextLink href="/coders?ref=footer">
+            <Link>Coders</Link>
+          </NextLink>
+          <Link
+            target="_blank"
+            href="https://github.com/usamahbass/helper/HOWTO.md"
+          >
+            How to Add New Helper
+          </Link>
         </Stack>
       </Container>
     </Box>

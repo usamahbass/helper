@@ -4,6 +4,8 @@ export type ResourcesType = {
     title: string;
     language: string;
     spoiler: string;
+    coder: string;
+    usage: string;
   };
   slug: string;
 };
@@ -14,6 +16,8 @@ export type ResourcesInfo = {
     spoiler: string;
     language: string;
     slug: string;
+    usage: string;
+    coder: string;
   };
   content: string;
 };

@@ -1,19 +1,11 @@
-import { useRef } from "react";
 import {
   chakra,
   Box,
   useColorModeValue,
   SimpleGrid,
   GridItem,
-  VisuallyHidden,
-  Input,
   Avatar,
   Text,
-  InputGroup,
-  InputLeftElement,
-  Icon,
-  Kbd,
-  InputRightElement,
 } from "@chakra-ui/react";
 import {
   AutoComplete,
@@ -21,9 +13,8 @@ import {
   AutoCompleteItem,
   AutoCompleteList,
 } from "@choc-ui/chakra-autocomplete";
-import { useHotkeys } from "react-hotkeys-hook";
-import { Search as SearchIcon } from "react-feather";
 import { uniqueArray } from "~/helper/uniqueArray";
+import Search from "~/components/search";
 
 type HeroProps = {
   handleSearch?: (e: any) => void;
@@ -39,10 +30,6 @@ const Hero = ({
   handleSearch,
   handleSelectLanguage,
 }: HeroProps) => {
-  const inputRef = useRef<HTMLInputElement | null>(null);
-
-  useHotkeys("ctrl+b", () => inputRef.current?.focus());
-
   return (
     <Box py={16} mx="auto">
       <Box textAlign={{ base: "left", md: "center" }} mx="auto">
@@ -75,34 +62,10 @@ const Hero = ({
           mt={20}
         >
           <GridItem as="label" colSpan={{ base: "auto", lg: 4 }}>
-            <VisuallyHidden>Cari disini</VisuallyHidden>
-            <InputGroup>
-              <InputLeftElement>
-                <Icon
-                  top="3%"
-                  position="relative"
-                  fontSize="lg"
-                  as={SearchIcon}
-                />
-              </InputLeftElement>
-              <Input
-                mt={0}
-                ref={inputRef}
-                size="lg"
-                type="text"
-                placeholder="Cari disini"
-                onChange={handleSearch}
-              />
-
-              <InputRightElement
-                display={{ base: "none", lg: "flex" }}
-                position="relative"
-                right="12%"
-                top="3px"
-              >
-                <Kbd>ctrl</Kbd> + <Kbd>B</Kbd>
-              </InputRightElement>
-            </InputGroup>
+            <Search
+              placeholder="for username: @username, for title: title"
+              handleSearch={handleSearch}
+            />
           </GridItem>
 
           <AutoComplete
@@ -115,7 +78,7 @@ const Hero = ({
           >
             <AutoCompleteInput
               width="60"
-              placeholder="Cari dengan bahasa"
+              placeholder="Language or Frameworks"
               h="12"
             />
             <AutoCompleteList w={{ base: "90%", lg: "60" }}>
@@ -126,7 +89,12 @@ const Hero = ({
                   textTransform="capitalize"
                   align="center"
                 >
-                  <Avatar size="sm" name={language.name} src={language.image} />
+                  <Avatar
+                    size="sm"
+                    bg="transparent"
+                    name={language.name}
+                    src={language.image}
+                  />
                   <Text ml="4">{language.name}</Text>
                 </AutoCompleteItem>
               ))}

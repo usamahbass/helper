@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import type { ResourcesType } from "~/types/resources";
 import { SimpleGrid } from "@chakra-ui/layout";
 import fs from "fs";
@@ -18,12 +18,22 @@ const Home = ({ resources }: HomePagesProps) => {
 
   const [resourcesList, setResourcesList] = useState<ResourcesType[]>([]);
 
-  const handleSearch = (e: InputEvent | any) => {
-    const newResourcesList = resources.filter((resource) =>
-      resource.frontMatter.title
-        .toLowerCase()
-        .startsWith(e.target.value.toLowerCase())
-    );
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    let newResourcesList = [];
+
+    if (e.target.value.includes("@")) {
+      newResourcesList = resources.filter((resource) =>
+        resource.frontMatter.coder
+          ?.toLowerCase()
+          ?.startsWith(e.target.value.replace("@", "").toLowerCase())
+      );
+    } else {
+      newResourcesList = resources.filter((resource) =>
+        resource.frontMatter.title
+          ?.toLowerCase()
+          ?.startsWith(e.target.value.toLowerCase())
+      );
+    }
 
     setResourcesList(newResourcesList);
   };

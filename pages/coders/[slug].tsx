@@ -1,0 +1,190 @@
+import { useState, ChangeEvent } from "react";
+import {
+  Avatar,
+  Center,
+  chakra,
+  Stack,
+  Box,
+  SimpleGrid,
+  useColorModeValue,
+} from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import fs from "fs";
+import path from "path";
+import matter from "gray-matter";
+import { UserProps, USERS } from "~/data/users";
+import { ResourcesType } from "~/types/resources";
+import { getLengthDifferentLanguage } from "~/helper/getLengthDifferentLanguage";
+import Layouts from "~/layouts";
+import Search from "~/components/search";
+import Card from "~/components/card";
+
+type CoderSlugProps = {
+  resources: Array<ResourcesType>;
+};
+
+const CoderSlug = ({ resources }: CoderSlugProps) => {
+  const { query, isReady, push } = useRouter();
+
+  const [searchValue, setSearchValue] = useState<string>("");
+
+  const slug: string | any = query?.slug;
+
+  const findCoderExistInUsers: UserProps | undefined = USERS.find(
+    (user) => user.username === slug?.replace("@", "")
+  );
+
+  const filterResourcesByExistingCoders = resources?.filter(
+    (resource) =>
+      resource?.frontMatter?.coder === findCoderExistInUsers?.username
+  );
+
+  let resourcesListExistingCoders = filterResourcesByExistingCoders.filter(
+    (resource) =>
+      resource.frontMatter.title
+        ?.toLowerCase()
+        ?.startsWith(searchValue.toLowerCase())
+  );
+
+  const findDifferentLanguageLength = getLengthDifferentLanguage(
+    filterResourcesByExistingCoders
+  );
+
+  if (!isReady) {
+    return <div>loading...</div>;
+  }
+
+  if (!findCoderExistInUsers) {
+    return push("/404");
+  }
+
+  return (
+    <Layouts>
+      <Center flexDirection="column" py="10" spacing={3} as={Stack}>
+        <Avatar
+          size="5xl"
+          src={findCoderExistInUsers?.avatar}
+          name={`@${findCoderExistInUsers?.username}`}
+        />
+        <chakra.h1
+          mb={3}
+          fontSize="4xl"
+          lineHeight="shorter"
+          fontWeight={{ base: "bold", md: "extrabold" }}
+          color={useColorModeValue("gray.900", "gray.100")}
+        >
+          {`@${findCoderExistInUsers?.username}`}
+        </chakra.h1>
+        <chakra.blockquote
+          mb={6}
+          textAlign={{ base: "center" }}
+          fontSize={{ base: "lg", md: "xl" }}
+          color="gray.500"
+          lineHeight="base"
+        >
+          {findCoderExistInUsers?.bio}
+        </chakra.blockquote>
+
+        <Stack
+          justifyContent="center"
+          alignItems="center"
+          spacing={50}
+          direction="row"
+          mt="3"
+        >
+          <Stack alignItems="center">
+            <chakra.h1
+              fontSize="4xl"
+              lineHeight="shorter"
+              fontWeight={{ base: "bold", md: "extrabold" }}
+              color={useColorModeValue("gray.900", "gray.100")}
+            >
+              {resources?.length}
+            </chakra.h1>
+
+            <chakra.p
+              mb={6}
+              textAlign={{ base: "center" }}
+              fontSize={{ base: "lg", md: "xl" }}
+              color="gray.500"
+              lineHeight="base"
+            >
+              Helper
+              <br />
+              Published
+            </chakra.p>
+          </Stack>
+
+          <Stack>
+            <Box width="1px" bg="#ccc" h="110px" />
+          </Stack>
+
+          <Stack alignItems="center">
+            <chakra.h1
+              fontSize="4xl"
+              lineHeight="shorter"
+              fontWeight={{ base: "bold", md: "extrabold" }}
+              color={useColorModeValue("gray.900", "gray.100")}
+            >
+              {findDifferentLanguageLength}
+            </chakra.h1>
+
+            <chakra.p
+              mb={6}
+              textAlign={{ base: "center" }}
+              fontSize={{ base: "lg", md: "xl" }}
+              color="gray.500"
+              lineHeight="base"
+            >
+              Different Language
+              <br />
+              or Frameworks
+            </chakra.p>
+          </Stack>
+        </Stack>
+      </Center>
+
+      <Stack spacing={10} mt="5">
+        <Search
+          placeholder={`Search helper by @${slug}`}
+          handleSearch={({
+            target: { value },
+          }: ChangeEvent<HTMLInputElement>) => setSearchValue(value)}
+        />
+
+        <SimpleGrid columns={{ base: 1, sm: 1, md: 2, lg: 2 }}>
+          {resourcesListExistingCoders?.length <= 0
+            ? searchValue !== ""
+              ? `no results from search "${searchValue}""`
+              : "no helper from this coder"
+            : resourcesListExistingCoders.map((resource) => (
+                <Card {...resource} />
+              ))}
+        </SimpleGrid>
+      </Stack>
+    </Layouts>
+  );
+};
+
+export const getServerSideProps = async () => {
+  const pathResources = fs.readdirSync(path.join("resources"));
+  const resources = pathResources.map((filename) => {
+    const markdownWithMeta = fs.readFileSync(
+      path.join("resources", filename),
+      "utf-8"
+    );
+    const { data: frontMatter } = matter(markdownWithMeta);
+    return {
+      frontMatter,
+      slug: filename.split(".")[0],
+    };
+  });
+
+  return {
+    props: {
+      resources,
+    },
+  };
+};
+
+export default CoderSlug;

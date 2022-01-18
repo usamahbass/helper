@@ -11,12 +11,9 @@ import {
 } from "@chakra-ui/react";
 import { Edit as EditIcon } from "react-feather";
 import type { ResourcesInfo } from "~/types/resources";
-import { unified } from "unified";
 import fs from "fs";
 import matter from "gray-matter";
-import html from "remark-html";
-import highlight from "remark-highlight.js";
-import markdown from "remark-parse";
+import NextLink from "next/link";
 import { formatLanguageIcons } from "~/helper/formatLanguageIcons";
 import Layouts from "~/layouts";
 import Markdown from "~/components/markdown";
@@ -29,14 +26,30 @@ const ResourceDetails: FunctionComponent<ResourceDetailsProps> = ({
   resource,
 }) => {
   const {
-    meta: { title, language, slug },
+    meta: { title, language, slug, coder, usage },
     content,
   } = resource;
 
   return (
     <Layouts>
       <Box mt={20} textAlign="center" mb={10}>
-        <Heading mb="5">{title}</Heading>
+        <Heading mb="5">
+          {title} {coder && "-"}
+          {coder && (
+            <NextLink href={`/coders/${coder}`}>
+              <Box
+                as="a"
+                _hover={{
+                  cursor: "pointer",
+                  color: "primary.500",
+                }}
+              >
+                &nbsp;@{coder}
+              </Box>
+            </NextLink>
+          )}
+        </Heading>
+
         <Box display="flex" justifyContent="center" alignItems="center" mt={5}>
           <Stack
             justifyContent="center"
@@ -67,7 +80,7 @@ const ResourceDetails: FunctionComponent<ResourceDetailsProps> = ({
             <EditIcon style={{ marginRight: 5 }} />
             <Link
               target="_blank"
-              href={`https://github.com/usamahbass/helper/${slug}.md`}
+              href={`https://github.com/usamahbass/helper/resources/${slug}.md`}
               position="relative"
               top="3px"
             >
@@ -76,6 +89,15 @@ const ResourceDetails: FunctionComponent<ResourceDetailsProps> = ({
           </Box>
         </Box>
       </Box>
+
+      <Box mb={3}>
+        <Stack direction="row" spacing={3}>
+          <Text width="15%">Usage for</Text>
+          <Text>:</Text>
+          <Text wordBreak="break-word">{usage}</Text>
+        </Stack>
+      </Box>
+
       <Divider mb={10} />
       <Markdown content={content} />
     </Layouts>
@@ -93,18 +115,12 @@ export const getStaticProps: GetStaticProps = async ({ params }: any) => {
 
   const { data, content } = matter(rawContent);
 
-  const result = await unified()
-    .use(markdown)
-    .use(highlight)
-    .use(html)
-    .process(content);
-
   const resource = {
     meta: {
       ...data,
       slug,
     },
-    content: result.toString(),
+    content: content.toString(),
   };
 
   return {

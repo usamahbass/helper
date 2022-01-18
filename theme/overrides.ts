@@ -7,7 +7,7 @@ import { fonts } from "./collects/font";
 
 export const config: ThemeConfig = {
   useSystemColorMode: false,
-  initialColorMode: "light",
+  initialColorMode: "dark",
 };
 
 export const overrides: ThemeOverride = {

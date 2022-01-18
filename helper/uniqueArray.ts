@@ -1,10 +1,5 @@
-type UniqueLanguage = {
-  name: string;
-  image: string;
-};
-
-export const uniqueArray = (array: UniqueLanguage[]) => {
-  const results = array?.filter((thing, index) => {
+export const uniqueArray = (array: [] | any) => {
+  const results = array?.filter((thing: any, index: number) => {
     const _thing = JSON.stringify(thing);
     return (
       index ===
