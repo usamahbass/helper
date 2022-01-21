@@ -19,7 +19,31 @@ const Footer = () => {
         justify="center"
         align="center"
       >
-        <Text fontSize="lg">&copy; 2021 Helper</Text>
+        <Text>&copy; 2021 Helper</Text>
+        <Text>
+          Built with{" "}
+          <Link
+            href="https://nextjs.org/"
+            target="_blank"
+            _hover={{
+              color: "#333",
+              textDecoration: "underline",
+            }}
+          >
+            NextJS
+          </Link>{" "}
+          and{" "}
+          <Link
+            href="https://chakra-ui.com/"
+            target="_blank"
+            _hover={{
+              color: "#4ED0C5",
+              textDecoration: "underline",
+            }}
+          >
+            ChakraUI
+          </Link>
+        </Text>
         <Stack direction="row" mt={3} spacing={6}>
           <Link target="_blank" href="https://github.com/usamahbass/helper">
             Github

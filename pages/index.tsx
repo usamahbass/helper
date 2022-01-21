@@ -1,9 +1,12 @@
 import { useState, useEffect, ChangeEvent } from "react";
 import type { ResourcesType } from "~/types/resources";
 import { SimpleGrid } from "@chakra-ui/layout";
+import { useDebounce } from "use-debounce";
+import { NextSeo as SEO } from "next-seo";
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
+import { DefaultSEO } from "~/seo.config";
 import Hero from "~/views/home/hero";
 import useLanguageList from "~/hooks/useLanguageList";
 import Card from "~/components/card";
@@ -18,24 +21,12 @@ const Home = ({ resources }: HomePagesProps) => {
 
   const [resourcesList, setResourcesList] = useState<ResourcesType[]>([]);
 
+  const [searchValue, setSearchValue] = useState("");
+
+  const [searchHasDebounce] = useDebounce(searchValue, 500);
+
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
-    let newResourcesList = [];
-
-    if (e.target.value.includes("@")) {
-      newResourcesList = resources.filter((resource) =>
-        resource.frontMatter.coder
-          ?.toLowerCase()
-          ?.startsWith(e.target.value.replace("@", "").toLowerCase())
-      );
-    } else {
-      newResourcesList = resources.filter((resource) =>
-        resource.frontMatter.title
-          ?.toLowerCase()
-          ?.startsWith(e.target.value.toLowerCase())
-      );
-    }
-
-    setResourcesList(newResourcesList);
+    setSearchValue(e.target.value);
   };
 
   const handleSelectLanguage = (language: string) => {
@@ -50,8 +41,35 @@ const Home = ({ resources }: HomePagesProps) => {
     setResourcesList(resources);
   }, []);
 
+  useEffect(() => {
+    if (searchHasDebounce) {
+      let newResourcesList: Array<ResourcesType> = [];
+
+      newResourcesList = resources.filter(
+        (resource) =>
+          resource.frontMatter.title
+            ?.toLowerCase()
+            ?.includes(searchHasDebounce.toLowerCase()) ||
+          resource.frontMatter.usage
+            ?.toLowerCase()
+            ?.includes(searchHasDebounce.toLowerCase()) ||
+          resource.frontMatter.coder
+            ?.toLowerCase()
+            ?.includes(searchHasDebounce.toLowerCase()) ||
+          resource.frontMatter.spoiler
+            ?.toLowerCase()
+            ?.includes(searchHasDebounce.toLowerCase())
+      );
+
+      setResourcesList(newResourcesList);
+    }
+
+    return () => setResourcesList(resources);
+  }, [searchHasDebounce]);
+
   return (
     <Layouts>
+      <SEO {...DefaultSEO} />
       <Hero
         handleSearch={handleSearch}
         languageList={languageList}
@@ -59,9 +77,9 @@ const Home = ({ resources }: HomePagesProps) => {
       />
 
       <SimpleGrid columns={{ base: 1, sm: 1, md: 2, lg: 2 }}>
-        {resourcesList.map((resource) => (
-          <Card {...resource} />
-        ))}
+        {resourcesList?.length > 0
+          ? resourcesList.map((resource) => <Card {...resource} />)
+          : `no results from search "${searchHasDebounce}""`}
       </SimpleGrid>
     </Layouts>
   );

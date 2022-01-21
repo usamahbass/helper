@@ -8,7 +8,9 @@ import {
   SimpleGrid,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { useDebounce } from "use-debounce";
 import { useRouter } from "next/router";
+import { NextSeo as SEO, NextSeoProps } from "next-seo";
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
@@ -24,9 +26,11 @@ type CoderSlugProps = {
 };
 
 const CoderSlug = ({ resources }: CoderSlugProps) => {
-  const { query, isReady, push } = useRouter();
+  const { query, isReady, push, asPath } = useRouter();
 
   const [searchValue, setSearchValue] = useState<string>("");
+
+  const [searchHasDebounce] = useDebounce(searchValue, 500);
 
   const slug: string | any = query?.slug;
 
@@ -43,7 +47,7 @@ const CoderSlug = ({ resources }: CoderSlugProps) => {
     (resource) =>
       resource.frontMatter.title
         ?.toLowerCase()
-        ?.startsWith(searchValue.toLowerCase())
+        ?.includes(searchHasDebounce.toLowerCase())
   );
 
   const findDifferentLanguageLength = getLengthDifferentLanguage(
@@ -58,8 +62,34 @@ const CoderSlug = ({ resources }: CoderSlugProps) => {
     return push("/404");
   }
 
+  const CoderSEO: NextSeoProps = {
+    title: `@${slug} - Coder in HELPER`,
+    description: `@${slug} has ${resources?.length} Helper Published with ${findDifferentLanguageLength} Different Language or Frameworks.`,
+    canonical: `https://helper.vercel.app${asPath}`,
+    openGraph: {
+      type: "website",
+      locale: "id",
+      url: `https://helper.vercel.app${asPath}`,
+      site_name: "@helper",
+      images: [
+        {
+          url: findCoderExistInUsers?.avatar,
+          width: 800,
+          height: 600,
+          alt: `@${slug} Coder in HELPER`,
+        },
+      ],
+    },
+    twitter: {
+      handle: "@handle",
+      site: "@site",
+      cardType: "summary_large_image",
+    },
+  };
+
   return (
     <Layouts>
+      <SEO {...CoderSEO} />
       <Center flexDirection="column" py="10" spacing={3} as={Stack}>
         <Avatar
           size="5xl"
@@ -154,8 +184,8 @@ const CoderSlug = ({ resources }: CoderSlugProps) => {
 
         <SimpleGrid columns={{ base: 1, sm: 1, md: 2, lg: 2 }}>
           {resourcesListExistingCoders?.length <= 0
-            ? searchValue !== ""
-              ? `no results from search "${searchValue}""`
+            ? searchHasDebounce !== ""
+              ? `no results from search "${searchHasDebounce}""`
               : "no helper from this coder"
             : resourcesListExistingCoders.map((resource) => (
                 <Card {...resource} />

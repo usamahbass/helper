@@ -6,7 +6,7 @@
 
 export type UserProps = {
   username: string;
-  avatar?: string;
+  avatar?: string | any;
   bio?: string;
 };
 

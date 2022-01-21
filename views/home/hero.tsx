@@ -48,9 +48,8 @@ const Hero = ({
           color="gray.500"
           lineHeight="base"
         >
-          Kumpulan fungsi utilitas dan API yang dikemas untuk mendukung
-          pengembangan yang cepat dan mudah. Cari fungsi yang anda butuhkan
-          disini
+          A collection of utility functions and APIs packaged to support fast
+          and easy development. Find the function you need here.
         </chakra.p>
         <SimpleGrid
           as="form"
@@ -63,7 +62,7 @@ const Hero = ({
         >
           <GridItem as="label" colSpan={{ base: "auto", lg: 4 }}>
             <Search
-              placeholder="for username: @username, for title: title"
+              placeholder="find anything here..."
               handleSearch={handleSearch}
             />
           </GridItem>
@@ -82,7 +81,7 @@ const Hero = ({
               h="12"
             />
             <AutoCompleteList w={{ base: "90%", lg: "60" }}>
-              {uniqueArray(languageList)?.map((language, i) => (
+              {uniqueArray(languageList)?.map((language: any, i: number) => (
                 <AutoCompleteItem
                   key={`language-${i}`}
                   value={language.name}

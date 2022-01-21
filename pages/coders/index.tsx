@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { Box, useColorModeValue, chakra, SimpleGrid } from "@chakra-ui/react";
+import { NextSeo as SEO } from "next-seo";
+import { useDebounce } from "use-debounce";
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
+import { USERS } from "~/data/users";
+import { CodersSEO } from "~/seo.config";
+import type { ResourcesType } from "~/types/resources";
 import CardCoder from "~/components/card-coder";
 import Search from "~/components/search";
-import { USERS } from "~/data/users";
-import type { ResourcesType } from "~/types/resources";
 import Layouts from "~/layouts";
 
 type CodersProps = {
@@ -15,20 +18,22 @@ type CodersProps = {
 
 const Coders = ({ resources }: CodersProps) => {
   const [searchValue, setSearchValue] = useState<string | null>(null);
-
-  console.log(resources, "HALOOO");
+  const [searchHasDebounce] = useDebounce(searchValue, 500);
 
   let filterUserStateBySearch =
-    typeof searchValue === "string"
-      ? searchValue?.includes("@")
+    typeof searchHasDebounce === "string"
+      ? searchHasDebounce?.includes("@")
         ? USERS.filter((user) =>
-            user.username.toLowerCase().includes(searchValue.replace("@", ""))
+            user.username
+              .toLowerCase()
+              .includes(searchHasDebounce.replace("@", ""))
           )
         : []
       : USERS;
 
   return (
     <Layouts>
+      <SEO {...CodersSEO} />
       <Box py={16} mx="auto">
         <Box mx="auto" display="flex" justifyContent="center">
           <chakra.h1
@@ -77,18 +82,20 @@ const Coders = ({ resources }: CodersProps) => {
       </Box>
 
       <SimpleGrid gap={7} columns={{ base: 1, sm: 1, md: 2, lg: 3 }}>
-        {filterUserStateBySearch.map((user, userIndex) => {
-          const filterResourceByExistingCoder = resources.filter(
-            (resource) => resource.frontMatter.coder === user.username
-          );
-          return (
-            <CardCoder
-              key={`${user.username}-${userIndex + 1}`}
-              resources={filterResourceByExistingCoder}
-              {...user}
-            />
-          );
-        })}
+        {filterUserStateBySearch?.length > 0
+          ? filterUserStateBySearch.map((user, userIndex) => {
+              const filterResourceByExistingCoder = resources.filter(
+                (resource) => resource.frontMatter.coder === user.username
+              );
+              return (
+                <CardCoder
+                  key={`${user.username}-${userIndex + 1}`}
+                  resources={filterResourceByExistingCoder}
+                  {...user}
+                />
+              );
+            })
+          : `no results from search "${searchHasDebounce}""`}
       </SimpleGrid>
     </Layouts>
   );

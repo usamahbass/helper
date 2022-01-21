@@ -9,6 +9,8 @@ import {
   Image,
   Stack,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import { NextSeo as SEO, NextSeoProps } from "next-seo";
 import { Edit as EditIcon } from "react-feather";
 import type { ResourcesInfo } from "~/types/resources";
 import fs from "fs";
@@ -25,13 +27,41 @@ interface ResourceDetailsProps {
 const ResourceDetails: FunctionComponent<ResourceDetailsProps> = ({
   resource,
 }) => {
+  const { asPath } = useRouter();
+
   const {
     meta: { title, language, slug, coder, usage },
     content,
   } = resource;
 
+  const DetailSEO: NextSeoProps = {
+    title: `${title} - @${coder}`,
+    description: `${usage}, see more in https://helper.vercel.app${asPath}`,
+    canonical: `https://helper.vercel.app${asPath}`,
+    openGraph: {
+      type: "website",
+      locale: "id",
+      url: `https://helper.vercel.app${asPath}`,
+      site_name: "@helper",
+      images: [
+        {
+          url: formatLanguageIcons(language),
+          width: 800,
+          height: 600,
+          alt: `${title} - @${coder}`,
+        },
+      ],
+    },
+    twitter: {
+      handle: "@handle",
+      site: "@site",
+      cardType: "summary_large_image",
+    },
+  };
+
   return (
     <Layouts>
+      <SEO {...DetailSEO} />
       <Box mt={20} textAlign="center" mb={10}>
         <Heading mb="5">
           {title} {coder && "-"}
