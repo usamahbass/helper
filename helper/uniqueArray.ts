@@ -3,7 +3,7 @@ export const uniqueArray = (array: [] | any) => {
     const _thing = JSON.stringify(thing);
     return (
       index ===
-      array.findIndex((obj) => {
+      array.findIndex((obj: any) => {
         return JSON.stringify(obj) === _thing;
       })
     );

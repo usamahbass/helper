@@ -34,6 +34,8 @@ const CoderSlug = ({ resources }: CoderSlugProps) => {
 
   const slug: string | any = query?.slug;
 
+  const colorValue = useColorModeValue("gray.900", "gray.100");
+
   const findCoderExistInUsers: UserProps | undefined = USERS.find(
     (user) => user.username === slug?.replace("@", "")
   );
@@ -101,7 +103,7 @@ const CoderSlug = ({ resources }: CoderSlugProps) => {
           fontSize="4xl"
           lineHeight="shorter"
           fontWeight={{ base: "bold", md: "extrabold" }}
-          color={useColorModeValue("gray.900", "gray.100")}
+          color={colorValue}
         >
           {`@${findCoderExistInUsers?.username}`}
         </chakra.h1>
@@ -127,7 +129,7 @@ const CoderSlug = ({ resources }: CoderSlugProps) => {
               fontSize="4xl"
               lineHeight="shorter"
               fontWeight={{ base: "bold", md: "extrabold" }}
-              color={useColorModeValue("gray.900", "gray.100")}
+              color={colorValue}
             >
               {resources?.length}
             </chakra.h1>
@@ -154,7 +156,7 @@ const CoderSlug = ({ resources }: CoderSlugProps) => {
               fontSize="4xl"
               lineHeight="shorter"
               fontWeight={{ base: "bold", md: "extrabold" }}
-              color={useColorModeValue("gray.900", "gray.100")}
+              color={colorValue}
             >
               {findDifferentLanguageLength}
             </chakra.h1>
@@ -187,8 +189,11 @@ const CoderSlug = ({ resources }: CoderSlugProps) => {
             ? searchHasDebounce !== ""
               ? `no results from search "${searchHasDebounce}""`
               : "no helper from this coder"
-            : resourcesListExistingCoders.map((resource) => (
-                <Card {...resource} />
+            : resourcesListExistingCoders.map((resource, idx) => (
+                <Card
+                  key={`${resource.frontMatter.title}-${idx + 1}`}
+                  {...resource}
+                />
               ))}
         </SimpleGrid>
       </Stack>

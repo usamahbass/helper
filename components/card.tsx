@@ -5,7 +5,7 @@ import type { ResourcesType } from "~/types/resources";
 import { formatLanguageIcons } from "~/helper/formatLanguageIcons";
 
 type CardType = ResourcesType & {
-  searchResult: string;
+  searchResult?: string;
 };
 
 const Card = ({ frontMatter, slug, searchResult }: CardType) => {
@@ -17,9 +17,9 @@ const Card = ({ frontMatter, slug, searchResult }: CardType) => {
     return () => setOpen(false);
   }, []);
 
-  const matchTitle = frontMatter.title.match(searchResult)?.[0];
-  const matchUsage = frontMatter.usage.match(searchResult)?.[0];
-  const matchCoder = frontMatter.coder.match(searchResult)?.[0];
+  const matchTitle = frontMatter.title.match(String(searchResult))?.[0];
+  const matchUsage = frontMatter.usage.match(String(searchResult))?.[0];
+  const matchCoder = frontMatter.coder.match(String(searchResult))?.[0];
 
   const { title, language, usage, coder } = frontMatter;
 

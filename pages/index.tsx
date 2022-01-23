@@ -75,12 +75,17 @@ const Home = ({ resources }: HomePagesProps) => {
 
       <SimpleGrid columns={{ base: 1, sm: 1, md: 2, lg: 2 }}>
         {resourcesList?.length > 0
-          ? resourcesList.map((resource) => {
+          ? resourcesList.map((resource, idx) => {
               const newResource = {
                 ...resource,
                 searchResult: searchHasDebounce,
               };
-              return <Card {...newResource} />;
+              return (
+                <Card
+                  key={`${resource.frontMatter.title}-${idx + 1}`}
+                  {...newResource}
+                />
+              );
             })
           : `no results from search "${searchHasDebounce}""`}
       </SimpleGrid>

@@ -9,20 +9,21 @@ type MarkdownProps = {
 };
 
 const Markdown = ({ content }: MarkdownProps) => {
-  const [codeValue, setCodeValue] = useState("");
+  const [codeValue, setCodeValue] = useState<string>("");
 
   const { hasCopied, onCopy } = useClipboard(codeValue);
 
   useEffect(() => {
-    if (codeValue) {
+    if (codeValue !== "") {
       onCopy();
     }
+
+    return () => setCodeValue("");
   }, [codeValue]);
 
   return (
     <ReactMarkdown
       className="markdown-body"
-      children={content}
       components={{
         code({ node, inline, className, children, ...props }) {
           const match = /language-(\w+)/.exec(className || "");
@@ -32,16 +33,15 @@ const Markdown = ({ content }: MarkdownProps) => {
                 float="right"
                 onClick={() => setCodeValue(String(children))}
               >
-                {hasCopied && codeValue === String(children)
+                {hasCopied || codeValue === String(children)
                   ? "copied 🎉"
                   : "copy"}
               </Button>
 
               <SyntaxHighlighter
+                PreTag="div"
                 style={atomOneDark}
                 language={match[1]}
-                PreTag="div"
-                {...props}
               >
                 {String(children).replace(/\n$/, "")}
               </SyntaxHighlighter>
@@ -53,7 +53,9 @@ const Markdown = ({ content }: MarkdownProps) => {
           );
         },
       }}
-    />
+    >
+      {content}
+    </ReactMarkdown>
   );
 };
 
