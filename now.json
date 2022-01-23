@@ -3,7 +3,7 @@
   "rewrites": [
     {
       "source": "/service-worker.js",
-      "destination": "/_next/static/service-worker.js"
+      "destination": "/.next/static/service-worker.js"
     }
   ],
   "headers": [
