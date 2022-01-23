@@ -16,7 +16,8 @@ const HelperApp = ({ Component, pageProps }: AppProps) => {
     <ThemeProvider>
       <Store>
         <Head>
-          {/* <link rel="shortcut icon" href="/favicon-2.ico" /> */}
+          <link rel="shortcut icon" href="/icons/favicon.ico" />
+          <link rel="manifest" href="/icons/manifest.json" />
         </Head>
 
         <TopProgress />

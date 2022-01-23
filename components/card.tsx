@@ -55,7 +55,7 @@ const Card = ({ frontMatter, slug, searchResult }: CardType) => {
               as="h4"
               lineHeight="tight"
               _hover={{
-                color: "blue.500",
+                color: "primary.500",
                 cursor: "pointer",
                 transition: "linear 0.3s",
               }}
