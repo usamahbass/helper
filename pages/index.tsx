@@ -11,6 +11,7 @@ import Hero from "~/views/home/hero";
 import useLanguageList from "~/hooks/useLanguageList";
 import Card from "~/components/card";
 import Layouts from "~/layouts";
+import Head from "~/components/head";
 
 type HomePagesProps = {
   resources: Array<ResourcesType>;
@@ -67,6 +68,7 @@ const Home = ({ resources }: HomePagesProps) => {
   return (
     <Layouts>
       <SEO {...DefaultSEO} />
+      <Head url="https://helper-site.vercel.app" />
       <Hero
         handleSearch={handleSearch}
         languageList={languageList}

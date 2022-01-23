@@ -19,6 +19,7 @@ import NextLink from "next/link";
 import { formatLanguageIcons } from "~/helper/formatLanguageIcons";
 import Layouts from "~/layouts";
 import Markdown from "~/components/markdown";
+import Head from "~/components/head";
 
 interface ResourceDetailsProps {
   resource: ResourcesInfo;
@@ -45,7 +46,7 @@ const ResourceDetails: FunctionComponent<ResourceDetailsProps> = ({
       site_name: "@helper",
       images: [
         {
-          url: formatLanguageIcons(language),
+          url: "https://helper-site.vercel.app/coders.png",
           width: 800,
           height: 600,
           alt: `${title} - @${coder}`,
@@ -62,6 +63,7 @@ const ResourceDetails: FunctionComponent<ResourceDetailsProps> = ({
   return (
     <Layouts>
       <SEO {...DetailSEO} />
+      <Head url={`https://helper-site.vercel.app${asPath}`} />
       <Box mt={20} textAlign="center" mb={10}>
         <Heading mb="5">
           {title} {coder && "-"}

@@ -8,6 +8,7 @@ import {
   SimpleGrid,
   useColorModeValue,
 } from "@chakra-ui/react";
+import type { GetStaticPaths, GetStaticProps } from "next";
 import { useDebounce } from "use-debounce";
 import { useRouter } from "next/router";
 import { NextSeo as SEO, NextSeoProps } from "next-seo";
@@ -20,6 +21,7 @@ import { getLengthDifferentLanguage } from "~/helper/getLengthDifferentLanguage"
 import Layouts from "~/layouts";
 import Search from "~/components/search";
 import Card from "~/components/card";
+import Head from "~/components/head";
 
 type CoderSlugProps = {
   resources: Array<ResourcesType>;
@@ -80,6 +82,18 @@ const CoderSlug = ({ resources }: CoderSlugProps) => {
           height: 600,
           alt: `@${slug} Coder in HELPER`,
         },
+        {
+          url: findCoderExistInUsers?.avatar,
+          width: 400,
+          height: 200,
+          alt: `@${slug} Coder in HELPER`,
+        },
+        {
+          url: findCoderExistInUsers?.avatar,
+          width: 200,
+          height: 100,
+          alt: `@${slug} Coder in HELPER`,
+        },
       ],
     },
     twitter: {
@@ -92,6 +106,7 @@ const CoderSlug = ({ resources }: CoderSlugProps) => {
   return (
     <Layouts>
       <SEO {...CoderSEO} />
+      <Head url={`https://helper-site.vercel.app${asPath}`} />
       <Center flexDirection="column" py="10" spacing={3} as={Stack}>
         <Avatar
           size="5xl"
@@ -201,7 +216,7 @@ const CoderSlug = ({ resources }: CoderSlugProps) => {
   );
 };
 
-export const getServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const pathResources = fs.readdirSync(path.join("resources"));
   const resources = pathResources.map((filename) => {
     const markdownWithMeta = fs.readFileSync(
@@ -219,6 +234,19 @@ export const getServerSideProps = async () => {
     props: {
       resources,
     },
+  };
+};
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: USERS.map((user) => {
+      return {
+        params: {
+          slug: user.username,
+        },
+      };
+    }),
+    fallback: false,
   };
 };
 
