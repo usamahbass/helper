@@ -25,15 +25,15 @@ const ThemeToggle = () => {
   }, []);
 
   return (
-    <Tooltip hasArrow label="Ganti tema" placement="bottom">
+    <Tooltip hasArrow label="Switch theme" placement="bottom">
       <IconButton
         position="fixed"
         bottom="3rem"
         right="3rem"
         size="sm"
         fontSize="lg"
-        aria-label={`Ganti ke ${text} mode`}
-        title={`Ganti ke ${text} mode`}
+        aria-label={`Switch to ${text} mode`}
+        title={`Switch to ${text} mode`}
         variant="ghost"
         onClick={toggleMode}
         icon={<SwitchIcon />}

@@ -112,7 +112,7 @@ const ResourceDetails: FunctionComponent<ResourceDetailsProps> = ({
             <EditIcon style={{ marginRight: 5 }} />
             <Link
               target="_blank"
-              href={`https://github.com/usamahbass/helper/resources/${slug}.md`}
+              href={`https://github.com/usamahbass/helper/blob/main/resources/${slug}.md`}
               position="relative"
               top="3px"
             >
