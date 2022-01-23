@@ -12,7 +12,7 @@ export const DefaultSEO: NextSeoProps = {
     site_name: "@helper",
     images: [
       {
-        url: "https://helper.vercel.app/logo.png",
+        url: "https://helper.vercel.app/coders.png",
         width: 800,
         height: 600,
         alt: "HELPER",
