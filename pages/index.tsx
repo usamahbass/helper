@@ -55,9 +55,6 @@ const Home = ({ resources }: HomePagesProps) => {
             ?.includes(searchHasDebounce.toLowerCase()) ||
           resource.frontMatter.coder
             ?.toLowerCase()
-            ?.includes(searchHasDebounce.toLowerCase()) ||
-          resource.frontMatter.spoiler
-            ?.toLowerCase()
             ?.includes(searchHasDebounce.toLowerCase())
       );
 
@@ -78,7 +75,13 @@ const Home = ({ resources }: HomePagesProps) => {
 
       <SimpleGrid columns={{ base: 1, sm: 1, md: 2, lg: 2 }}>
         {resourcesList?.length > 0
-          ? resourcesList.map((resource) => <Card {...resource} />)
+          ? resourcesList.map((resource) => {
+              const newResource = {
+                ...resource,
+                searchResult: searchHasDebounce,
+              };
+              return <Card {...newResource} />;
+            })
           : `no results from search "${searchHasDebounce}""`}
       </SimpleGrid>
     </Layouts>

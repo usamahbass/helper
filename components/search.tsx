@@ -32,6 +32,7 @@ const Search = ({ handleSearch, placeholder }: SearchProps) => {
           ref={inputRef}
           size="lg"
           type="text"
+          fontSize="md"
           placeholder={placeholder}
           onChange={handleSearch}
         />

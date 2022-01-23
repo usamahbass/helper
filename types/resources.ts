@@ -3,7 +3,6 @@ export type ResourcesType = {
     code: string;
     title: string;
     language: string;
-    spoiler: string;
     coder: string;
     usage: string;
   };
@@ -13,7 +12,6 @@ export type ResourcesType = {
 export type ResourcesInfo = {
   meta: {
     title: string;
-    spoiler: string;
     language: string;
     slug: string;
     usage: string;

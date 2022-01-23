@@ -59,7 +59,7 @@ const Footer = () => {
           </NextLink>
           <Link
             target="_blank"
-            href="https://github.com/usamahbass/helper/HOWTO.md"
+            href="https://github.com/usamahbass/helper#contribute"
           >
             How to Add New Helper
           </Link>

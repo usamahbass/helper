@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
-import { Box, Text, Divider, Image, ScaleFade } from "@chakra-ui/react";
+import { Box, Text, Divider, Image, ScaleFade, chakra } from "@chakra-ui/react";
 import NextLink from "next/link";
 import type { ResourcesType } from "~/types/resources";
 import { formatLanguageIcons } from "~/helper/formatLanguageIcons";
 
-const Card = ({ frontMatter, slug }: ResourcesType) => {
+type CardType = ResourcesType & {
+  searchResult: string;
+};
+
+const Card = ({ frontMatter, slug, searchResult }: CardType) => {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -13,7 +17,11 @@ const Card = ({ frontMatter, slug }: ResourcesType) => {
     return () => setOpen(false);
   }, []);
 
-  const { title, language, spoiler, coder } = frontMatter;
+  const matchTitle = frontMatter.title.match(searchResult)?.[0];
+  const matchUsage = frontMatter.usage.match(searchResult)?.[0];
+  const matchCoder = frontMatter.coder.match(searchResult)?.[0];
+
+  const { title, language, usage, coder } = frontMatter;
 
   return (
     <ScaleFade in={open} initialScale={0.8}>
@@ -53,14 +61,33 @@ const Card = ({ frontMatter, slug }: ResourcesType) => {
               }}
               isTruncated
             >
-              {title} {coder ? `- @${coder}` : ""}
+              <chakra.span bg={matchTitle ? "orange.500" : "initial"}>
+                {title}
+              </chakra.span>{" "}
+              {coder ? (
+                <>
+                  {" "}
+                  <chakra.span>-</chakra.span>{" "}
+                  <chakra.span bg={matchCoder ? "orange.500" : "initial"}>
+                    {`@${coder}`}{" "}
+                  </chakra.span>
+                </>
+              ) : (
+                ""
+              )}
             </Box>
           </NextLink>
 
           <Divider mt="3" />
 
-          <Text mt="3" as="p" color="gray.500" isTruncated>
-            {spoiler}
+          <Text
+            mt="3"
+            as="p"
+            isTruncated
+            bg={matchUsage ? "orange.500" : "initial"}
+            color={matchUsage ? "white" : "gray.500"}
+          >
+            {usage}
           </Text>
         </Box>
       </Box>
