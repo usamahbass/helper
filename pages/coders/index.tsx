@@ -11,6 +11,7 @@ import type { ResourcesType } from "~/types/resources";
 import CardCoder from "~/components/card-coder";
 import Search from "~/components/search";
 import Layouts from "~/layouts";
+import Head from "~/components/head";
 
 type CodersProps = {
   resources: Array<ResourcesType>;
@@ -34,6 +35,7 @@ const Coders = ({ resources }: CodersProps) => {
   return (
     <Layouts>
       <SEO {...CodersSEO} />
+      <Head url="https://helper-site.vercel.app/coders" />
       <Box py={16} mx="auto">
         <Box mx="auto" display="flex" justifyContent="center">
           <chakra.h1
