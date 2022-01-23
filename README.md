@@ -6,7 +6,7 @@ Starting from something small like naming a variable or naming a function, we de
 
 Then move on to help functions such as addition functions or multiplication functions for example, this HELPER wraps functions that you might use in programming created by other programmers.
 
-Check it at [helper.vercel.app](https://helper.vercel.app)
+Check it at [helper-site.vercel.app](https://helper-site.vercel.app)
 
 ## Licence
 

@@ -36,12 +36,12 @@ const ResourceDetails: FunctionComponent<ResourceDetailsProps> = ({
 
   const DetailSEO: NextSeoProps = {
     title: `${title} - @${coder}`,
-    description: `${usage}, see more in https://helper.vercel.app${asPath}`,
-    canonical: `https://helper.vercel.app${asPath}`,
+    description: `${usage}, see more in https://helper-site.vercel.app${asPath}`,
+    canonical: `https://helper-site.vercel.app${asPath}`,
     openGraph: {
       type: "website",
       locale: "id",
-      url: `https://helper.vercel.app${asPath}`,
+      url: `https://helper-site.vercel.app${asPath}`,
       site_name: "@helper",
       images: [
         {
