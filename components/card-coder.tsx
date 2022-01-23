@@ -59,10 +59,11 @@ const CardCoder = ({ username, avatar, bio, resources }: CardCoderProps) => {
           </Text>
 
           <AvatarGroup justifyContent="center" mt="3" max={8} size="sm">
-            {resources.map((resource) => (
+            {resources.map((resource, idx) => (
               <Avatar
                 bg="transparent"
                 name={resource.frontMatter.language}
+                key={`${resource.frontMatter.language}-${idx + 1}`}
                 src={formatLanguageIcons(resource.frontMatter.language)}
               />
             ))}
