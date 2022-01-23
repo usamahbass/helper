@@ -1,4 +1,4 @@
-### Helper
+## Helper
 
 In the world of programming, of course, we definitely come across cases that are sometimes difficult to solve.
 
@@ -8,11 +8,11 @@ Then move on to help functions such as addition functions or multiplication func
 
 Check it at [helper.vercel.app](https://helper.vercel.app)
 
-### Licence
+## Licence
 
 MIT Licence
 
-### Contribute
+## Contribute
 
 How to Add New Helper ??
 
